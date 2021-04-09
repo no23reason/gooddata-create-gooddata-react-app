@@ -1,6 +1,6 @@
 // (C) 2021 GoodData Corporation
 
-import { getSchema, DEFAULT_SCHEMA, getHostnameWithSchema } from "./stringUtils";
+import { getHostnameWithSchema } from "./stringUtils";
 import replaceInFiles from "./replaceInFiles";
 
 export const performTemplateReplacements = async ({
@@ -10,7 +10,6 @@ export const performTemplateReplacements = async ({
     backend,
     flavor,
 }) => {
-    const hostnameSchema = getSchema(hostname) || DEFAULT_SCHEMA;
     const isTigerBackend = backend === "tiger";
 
     // this object has structure corresponding to the file structure relative to targetDir
@@ -27,11 +26,6 @@ export const performTemplateReplacements = async ({
                 regex: /"refresh-ldm": "node .\/scripts\/refresh-ldm.js"/g,
                 value: '"refresh-ldm": "node ./scripts/refresh-ldm.js --backend tiger"',
                 apply: isTigerBackend,
-            },
-            {
-                regex: /HTTPS=true/g,
-                value: "",
-                apply: hostnameSchema !== "https",
             },
             {
                 regex: /PORT=3000/g,
